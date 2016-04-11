@@ -1,0 +1,59 @@
+---
+- name: Set timezone
+  copy:
+    content='Europe/London{{'\n'}}'
+    dest='/etc/timezone'
+    owner='root'
+    group='root'
+    mode='0644'
+  notify:
+    - Update timezone
+
+- name: Update apt cache
+  apt:
+    update-cache='yes'
+    cache_valid_time='3600'
+
+- name: Install firewall
+  apt:
+    name='ufw'
+    state='latest'
+
+- name: Open port 22 and enable firewall
+  ufw:
+    port='22'
+    rule='allow'
+    state='enabled'
+
+- name: Install Fail2ban
+  apt:
+    name='fail2ban'
+    state='latest'
+
+- name: Ensure Fail2ban is running
+  service:
+    name='fail2ban'
+    state='started'
+
+- name: Install Pushbullet script
+  template:
+    src='rc.local.j2'
+    dest='/etc/rc.local'
+
+- name: Install update script
+  copy:
+    src='update.sh'
+    dest='/home/{{user}}/update.sh'
+    owner='{{user}}'
+    group='{{user}}'
+    mode='0764'
+
+- name: Install general tools
+  apt:
+    name='{{item}}'
+    state='latest'
+  with_items:
+    - htop
+    - git
+    - dos2unix
+    - language-pack-en

@@ -1,0 +1,10 @@
+alias wsudo='sudo -u www-data'
+alias ls='ls -alh --color=auto'
+
+function cd() {
+    new_directory="$*";
+    if [ $# -eq 0 ]; then
+        new_directory=${HOME};
+    fi;
+    builtin cd "${new_directory}" && ls -alh
+}

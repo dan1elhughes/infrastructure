@@ -1,0 +1,37 @@
+---
+- name: Enable bash colours
+  template:
+    src='bashrc.j2'
+    dest='/home/{{user}}/.bashrc'
+    owner='{{user}}'
+    group='{{user}}'
+
+- name: Enable bash aliases
+  copy:
+    src='bash_aliases'
+    dest='/home/{{user}}/.bash_aliases'
+    owner='{{user}}'
+    group='{{user}}'
+
+- name: Disable legal
+  file:
+    path='/etc/legal'
+    state='absent'
+
+- name: Copy custom MOTD
+  template:
+    src='motd.j2'
+    dest='/etc/update-motd.d/00-motd'
+    owner='root'
+    group='root'
+    mode=0755
+
+- shell: ls -1 /etc/update-motd.d
+  register: contents
+
+- name: Delete all other MOTDs
+  file:
+    path='/etc/update-motd.d/{{item}}'
+    state=absent
+  with_items: '{{contents.stdout_lines}}'
+  when: item != '00-motd'
