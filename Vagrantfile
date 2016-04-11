@@ -4,7 +4,7 @@ Vagrant.configure('2') do |config|
 	config.vm.define 'master', primary: true do |master|
 		master.vm.hostname = 'master'
 		master.vm.network :private_network, ip: '192.168.10.1'
-		master.vm.network :forwarded_port, guest: 22, host: 2202, id: 'ssh'
+		master.vm.network :forwarded_port, guest: 22, host: 2200, id: 'ssh'
 		master.vm.provision 'file', source: '~/.ssh/id_rsa', destination: '~/.ssh/id_rsa'
 		master.vm.provision 'shell', path: 'master.sh'
 	end
