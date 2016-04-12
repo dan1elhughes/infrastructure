@@ -1,14 +1,21 @@
 ---
-- name: Apply common configuration
+- name: common
   hosts: all
   become: yes
   roles:
     - common
   tags: common
 
-- name: Apply aesthetic configuration
+- name: aesthetic
   hosts: all
   become: yes
   roles:
     - aesthetic
   tags: aesthetic
+
+- name: redis
+  hosts: redis
+  become: yes
+  roles:
+    - redis
+  tags: redis
