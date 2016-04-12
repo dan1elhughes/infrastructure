@@ -1,0 +1,6 @@
+---
+- name: 'Rebuild MOTD'
+  shell: run-parts /etc/update-motd.d/
+
+- name: Restart SSH
+  command: service ssh restart
