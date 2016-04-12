@@ -17,7 +17,7 @@
 - name: Install firewall
   apt:
     name='ufw'
-    state='latest'
+    state='present'
 
 - name: Open port 22 and enable firewall
   ufw:
@@ -28,7 +28,7 @@
 - name: Install Fail2ban
   apt:
     name='fail2ban'
-    state='latest'
+    state='present'
 
 - name: Ensure Fail2ban is running
   service:
@@ -51,9 +51,7 @@
 - name: Install general tools
   apt:
     name='{{item}}'
-    state='latest'
+    state='present'
   with_items:
-    - htop
     - git
-    - dos2unix
     - language-pack-en

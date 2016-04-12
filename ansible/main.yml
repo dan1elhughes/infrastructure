@@ -5,8 +5,6 @@
   roles:
     - common
   tags: common
-  handlers:
-  - include: handlers/handlers.yml
 
 - name: Apply aesthetic configuration
   hosts: all
@@ -14,5 +12,3 @@
   roles:
     - aesthetic
   tags: aesthetic
-  handlers:
-  - include: handlers/handlers.yml

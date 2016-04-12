@@ -21,17 +21,32 @@
 - name: Copy custom MOTD
   template:
     src='motd.j2'
-    dest='/etc/update-motd.d/00-motd'
+    dest='/etc/motd'
     owner='root'
     group='root'
     mode=0755
+  notify:
+    - Rebuild MOTD
 
-- shell: ls -1 /etc/update-motd.d
+- name: Register contents of MOTDs
+  shell: 'ls -1 /etc/update-motd.d'
   register: contents
+  changed_when: False
 
-- name: Delete all other MOTDs
+- name: Disable all MOTDs
   file:
     path='/etc/update-motd.d/{{item}}'
-    state=absent
+    mode='0644'
+    follow='yes'
   with_items: '{{contents.stdout_lines}}'
-  when: item != '00-motd'
+  notify:
+    - Rebuild MOTD
+
+- name: Enable custom MOTD
+  lineinfile:
+    dest='/etc/ssh/sshd_config'
+    regexp='^PrintMotd'
+    line='PrintMotd yes'
+    backrefs='yes'
+  notify:
+    - Restart SSH

@@ -1,20 +1,11 @@
 ---
-- name: Set up user account and disable root
+- name: Set up user account and secure SSH
   hosts: all
   roles:
     - user
-  vars:
-    ansible_user: root
-  tags: user
-  handlers:
-  - include: handlers/handlers.yml
-
-- name: Secure SSH
-  hosts: all
-  roles:
     - ssh
   vars:
-    ansible_user: root
-  tags: ssh
+    ansible_ssh_user: root
+  tags: user
   handlers:
   - include: handlers/handlers.yml
