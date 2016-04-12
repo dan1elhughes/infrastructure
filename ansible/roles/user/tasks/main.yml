@@ -17,13 +17,9 @@
     group='{{user}}'
 
 - name: Add SSH public key
-  get_url:
-    url='https://github.com/dan1elhughes.keys'
+  copy:
+    src='/home/vagrant/.ssh/id_rsa.pub'
     dest='/home/{{user}}/.ssh/authorized_keys'
-
-- name: Fix SSH permissions
-  file:
-    path='/home/{{user}}/.ssh/authorized_keys'
     owner='{{user}}'
     group='{{user}}'
     mode='0644'
