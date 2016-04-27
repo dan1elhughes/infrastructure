@@ -18,12 +18,11 @@ Vagrant.configure("2") do |config|
 		master.vm.provision "shell", path: "master.sh"
 	end
 
-
 	(0..$nodes-1).each do |i|
-		config.vm.define "web#{i}" do |node|
-			node.vm.hostname = "web#{i}"
-			node.vm.network :private_network, ip: "192.168.10.1#{i}"
-			node.vm.network :forwarded_port, guest: "22", host: "222#{i}", id: "ssh"
+		config.vm.define "node#{i}" do |node|
+			node.vm.hostname = "node#{i}"
+			node.vm.network :private_network, ip: "192.168.10.#{10 + i}"
+			node.vm.network :forwarded_port, guest: "22", host: "#{2220 + i}", id: "ssh"
 			node.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "/tmp/authorized_keys"
 			node.vm.provision "shell", inline: $provision
 		end
