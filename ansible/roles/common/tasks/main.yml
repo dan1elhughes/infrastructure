@@ -19,11 +19,15 @@
     name='ufw'
     state='present'
 
-- name: Open port 22 and enable firewall
+- name: Open ports and enable firewall
   ufw:
-    port='22'
+    port='{{item}}'
     rule='allow'
     state='enabled'
+  with_items:
+  - 22
+  - 80
+  - 443
 
 - name: Install Fail2ban
   apt:

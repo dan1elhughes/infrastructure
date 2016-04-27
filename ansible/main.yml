@@ -13,9 +13,9 @@
     - aesthetic
   tags: aesthetic
 
-- name: redis
-  hosts: redis
+- name: docker
+  hosts: all
   become: yes
   roles:
-    - redis
-  tags: redis
+    - docker
+  tags: docker
