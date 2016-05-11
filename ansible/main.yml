@@ -14,8 +14,15 @@
   tags: aesthetic
 
 - name: docker
-  hosts: all
+  hosts: nodes
   become: yes
   roles:
     - docker
   tags: docker
+
+# - name: proxy
+#   hosts: nodes
+#   become: yes
+#   roles:
+#     - proxy
+#   tags: proxy

@@ -14,17 +14,15 @@
 
 - name: Add Docker source to source list
   copy:
-    content='deb https{{':'}}//apt.dockerproject.org/repo ubuntu-trusty main'
+    content="deb https://apt.dockerproject.org/repo ubuntu-trusty main"
     dest='/etc/apt/sources.list.d/docker.list'
     force=yes
 
 - name: Install Docker engine
   apt:
-    name='{{item}}'
+    name='docker-engine'
     state='present'
     update-cache='yes'
-  with_items:
-  - 'docker-engine'
   notify:
   - Start Docker
 

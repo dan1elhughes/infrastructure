@@ -30,14 +30,13 @@ Vagrant.configure("2") do |config|
 		master.vm.provision "shell", inline: $master
 	end
 
-	(0..$nodes-1).each do |i|
+	(1..$nodes).each do |i|
 		config.vm.define "node#{i}" do |node|
 			node.vm.hostname = "node#{i}"
-			node.vm.network :private_network, ip: "192.168.10.#{10 + i}"
-			node.vm.network :forwarded_port, guest: "22", host: "#{2220 + i}", id: "ssh"
+			node.vm.network :private_network, ip: "192.168.10.#{9 + i}"
+			node.vm.network :forwarded_port, guest: "22", host: "#{2219 + i}", id: "ssh"
 			node.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "/tmp/authorized_keys"
 			node.vm.provision "shell", inline: $slave
 		end
 	end
-
 end
