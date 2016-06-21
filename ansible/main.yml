@@ -1,28 +1,13 @@
 ---
-- name: common
-  hosts: all
+
+- hosts: all
   become: yes
   roles:
-    - common
-  tags: common
+    - { role: common, tags: common }
+    - { role: aesthetic, tags: aesthetic }
 
-- name: aesthetic
-  hosts: all
+- hosts: nodes
   become: yes
   roles:
-    - aesthetic
-  tags: aesthetic
-
-- name: docker
-  hosts: nodes
-  become: yes
-  roles:
-    - docker
-  tags: docker
-
-# - name: proxy
-#   hosts: nodes
-#   become: yes
-#   roles:
-#     - proxy
-#   tags: proxy
+    - { role: docker, tags: docker }
+#   - { role: proxy, tags: proxy }
