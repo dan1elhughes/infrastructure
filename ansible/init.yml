@@ -1,5 +1,6 @@
 ---
 - name: Set up user account and secure SSH
+  become: yes
   hosts: all
   roles:
     - user
