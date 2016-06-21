@@ -11,7 +11,7 @@
 #
 # By default this script does nothing.
 
-PUBLICIP=$(curl -sS icanhazip.com/s)
+PUBLICIP=$(curl -sSL https://icanhazip.com)
 LOCALIP=$(hostname -I)
 
 # Send boot notification
