@@ -1,0 +1,59 @@
+---
+- name: Open port 80
+  ufw: rule=allow port=80
+
+- name: Install Nginx
+  apt:
+    name={{ item }}
+    state=latest
+  with_items:
+    - nginx
+  notify:
+    - Restart Nginx
+
+- name: Determine Nginx thread limit
+  shell: "ulimit -n"
+  register: ulimit
+  changed_when: false
+
+- name: Create main Nginx configuration
+  template:
+    src="nginx.conf"
+    dest="/etc/nginx/nginx.conf"
+  notify:
+    - Restart Nginx
+
+- name: Customise success page
+  copy:
+    src="no-domain.html"
+    dest="/usr/share/nginx/html/index.html"
+
+- name: Create root web server directory
+  file: path="/var/www" state=directory owner="www-data" group="www-data" mode=0755
+
+- name: Create web server SSH directory for deploy keys
+  file: path="/var/www/.ssh" state=directory owner="www-data" group="www-data" mode=0700
+
+# - name: Generate server-specific domain config files
+#   template:
+#     src="domains.conf.j2"
+#     dest="/etc/nginx/sites-available/{{ item.url }}.conf"
+#   with_items: domains
+#   notify:
+#     - Restart Nginx
+
+# - name: Enable domain configs
+#   file:
+#     src="/etc/nginx/sites-available/{{ item.url }}.conf"
+#     dest="/etc/nginx/sites-enabled/{{ item.url }}.conf"
+#     state=link
+#   with_items: domains
+#   notify:
+#     - Restart Nginx
+
+# - name: Create domain folders
+#   file:
+#     path="/var/www/{{ item.url }}"
+#     state=directory
+#     owner="www-data" group="www-data"
+#   with_items: domains

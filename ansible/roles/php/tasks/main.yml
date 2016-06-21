@@ -1,0 +1,34 @@
+---
+- name: Add PHP repository
+  apt_repository: repo="ppa:ondrej/php"
+
+- name: Install PHP packages
+  apt:
+    name={{ item }}
+    state=latest
+  with_items:
+    - php7.1-fpm
+    - php7.1-mysql
+    - php7.1-gd
+    - php7.1-cli
+    - php7.1-curl
+  notify:
+    - Restart PHP-FPM
+
+- name: Disable CGI file path fixing
+  lineinfile:
+    dest="/etc/php/7.1/fpm/php.ini"
+    regexp="^;cgi.fix_pathinfo=1"
+    line="cgi.fix_pathinfo=0"
+    backrefs=yes
+  notify:
+    - Restart PHP-FPM
+
+- name: Disable PHP X-Powered-By header
+  lineinfile:
+    dest="/etc/php/7.1/fpm/php.ini"
+    regexp="^expose_php = On"
+    line="expose_php = Off"
+    backrefs=yes
+  notify:
+    - Restart PHP-FPM

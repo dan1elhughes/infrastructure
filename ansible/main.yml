@@ -9,5 +9,10 @@
 - hosts: nodes
   become: yes
   roles:
-    - { role: docker, tags: docker }
-#   - { role: proxy, tags: proxy }
+    - { role: php,      tags: php       }
+    - { role: nginx,    tags: nginx     }
+#   - { role: mysql,    tags: mysql     }
+#   - { role: redis,    tags: redis     }
+#   - { role: newrelic, tags: newrelic  }
+#   - { role: docker,   tags: docker    }
+#   - { role: proxy,    tags: proxy     }

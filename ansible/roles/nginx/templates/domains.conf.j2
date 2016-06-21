@@ -1,0 +1,40 @@
+server {
+	listen 80;
+	server_name www.{{ item.url }};
+	return 301 $scheme://{{ item.url }}$request_uri;
+}
+
+server {
+	listen 80;
+	server_name {{ item.url }};
+
+	root /var/www/{{ item.url }}/htdocs;
+	index index.html index.htm index.php;
+
+	location / {
+		try_files $uri $uri/{% if not item.unrouted %} /index.php?$query_string {% else %} =404 {% endif %};
+	}
+
+	{% if item.unrouted %}error_page 404 /includes/errors/404.php;{% endif %}
+
+	error_log /var/log/nginx/{{item.url}}-error.log error;
+
+	location ~ \.php$ {
+			try_files $uri =404;
+			fastcgi_pass unix:/var/run/php/php7.1-fpm.sock;
+			fastcgi_index index.php;
+			fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+			fastcgi_param PHP_VALUE "newrelic.appname={{ item.url }}";
+			fastcgi_param APP_ENV production;
+			include fastcgi_params;
+	}
+}
+
+server {
+	listen 80;
+	server_name upcheck.{{ item.url }};
+	location / {
+		return 200 'up';
+		add_header Content-Type text/plain;
+	}
+}
