@@ -1,11 +1,13 @@
 server {
 	listen 80;
+	listen [::]:80;
 	server_name www.{{ item.url }};
 	return 301 $scheme://{{ item.url }}$request_uri;
 }
 
 server {
 	listen 80;
+	listen [::]:80;
 	server_name {{ item.url }};
 
 	root /var/www/{{ item.url }}/htdocs;
@@ -32,6 +34,7 @@ server {
 
 server {
 	listen 80;
+	listen [::]:80;
 	server_name upcheck.{{ item.url }};
 	location / {
 		return 200 'up';
