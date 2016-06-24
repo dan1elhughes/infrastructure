@@ -31,9 +31,6 @@
 - name: Create root web server directory
   file: path="/var/www" state=directory owner="www-data" group="www-data" mode=0755
 
-- name: Create web server SSH directory for deploy keys
-  file: path="/var/www/.ssh" state=directory owner="www-data" group="www-data" mode=0700
-
 # - name: Generate server-specific domain config files
 #   template:
 #     src="domains.conf.j2"
