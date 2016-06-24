@@ -1,0 +1,43 @@
+---
+- name: Create root web server directory
+  file:
+    path="/var/www"
+    state=directory
+    owner="www-data"
+    group="www-data"
+    mode=0755
+
+- name: Create directory for deploy keys
+  file:
+    path="/var/www/.ssh"
+    state=directory
+    owner="www-data"
+    group="www-data"
+    mode=0700
+
+- name: Copy Bitbucket deploy key
+  copy:
+    src="deploy.id_rsa"
+    content="{{ bitbucket_deploy_key }}"
+    mode=0600
+  become_user: www-data
+
+- name: Create SSH config file
+  copy:
+    dest="/var/www/.ssh/config"
+    content="IdentityFile ~/.ssh/deploy.id_rsa"
+    owner="www-data"
+    group="www-data"
+    mode=0664
+  become_user: www-data
+
+- name: Fetch production git repositories
+  git:
+    repo={{ item.src }}
+    version={{ item.branch }}
+    dest="/var/www/{{ item.url }}"
+    depth=1
+    accept_hostkey=yes
+  become_user: www-data
+  with_items: domains
+  when: item.repo is defined
