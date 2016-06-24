@@ -1,0 +1,38 @@
+---
+- name: Add Redis repository
+  apt_repository:
+    repo="ppa:rwky/redis"
+
+- name: Install Redis package
+  apt:
+    name="redis-server"
+    state="latest"
+  notify:
+    - Restart Redis
+
+- name: Disable append-only file
+  lineinfile:
+    dest="/etc/redis/redis.conf"
+    regexp="^appendonly"
+    line="appendonly no"
+    backrefs=yes
+  notify:
+    - Restart Redis
+
+- name: Disable RDB snapshots
+  lineinfile:
+    dest="/etc/redis/redis.conf"
+    regexp="^dbfilename"
+    line="# dbfilename redis.rdb"
+    backrefs=yes
+  notify:
+    - Restart Redis
+
+- name: Bind Redis to localhost
+  lineinfile:
+    dest="/etc/redis/redis.conf"
+    regexp="^# bind 127.0.0.1"
+    line="bind 127.0.0.1"
+    backrefs=yes
+  notify:
+    - Restart Redis
