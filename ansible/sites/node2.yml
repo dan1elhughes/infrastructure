@@ -1,0 +1,5 @@
+---
+sites:
+  - url: "jlwbenchmark.co.uk"
+    repo: "git@bitbucket.org:dan1elhughes/benchmark.git"
+    root: "/htdocs"
