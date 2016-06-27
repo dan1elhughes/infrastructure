@@ -44,3 +44,11 @@
   become_user: www-data
   with_items: "{{ sites }}"
   when: item.repo is defined
+
+- name: Execute post clone actions
+  shell: "{{ item.post_install }}"
+  with_items: "{{ sites }}"
+  become_user: www-data
+  when: item.post_install is defined
+  args:
+    chdir: "/var/www/{{item.url}}"

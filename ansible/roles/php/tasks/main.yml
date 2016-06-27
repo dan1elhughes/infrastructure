@@ -7,11 +7,12 @@
     name={{ item }}
     state=latest
   with_items:
-    - php{{ php_version }}-fpm
-    - php{{ php_version }}-mysql
-    - php{{ php_version }}-gd
     - php{{ php_version }}-cli
     - php{{ php_version }}-curl
+    - php{{ php_version }}-fpm
+    - php{{ php_version }}-gd
+    - php{{ php_version }}-mysql
+    - php{{ php_version }}-zip
   notify:
     - Restart PHP-FPM
 
