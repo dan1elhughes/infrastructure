@@ -14,6 +14,6 @@
     - { role: repos,    tags: repos, become_user: www-data }
 #   - { role: mysql,    tags: mysql     }
     - { role: redis,    tags: redis     }
-#   - { role: newrelic, tags: newrelic  }
+    - { role: newrelic, tags: newrelic  }
 #   - { role: docker,   tags: docker    }
 #   - { role: proxy,    tags: proxy     }

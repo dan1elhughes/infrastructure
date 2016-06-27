@@ -1,0 +1,79 @@
+---
+- name: Add NewRelic apt key
+  apt_key:
+    url: "https://download.newrelic.com/548C16BF.gpg"
+    state: present
+
+- name: Add source repository
+  copy:
+    dest: "/etc/apt/sources.list.d/newrelic.list"
+    content: "deb http://apt.newrelic.com/debian/ newrelic non-free\n"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: Update apt cache
+  apt:
+    update_cache=yes
+
+- name: Configure silent installation
+  debconf:
+    name="newrelic-php5"
+    question="newrelic-php5/{{ item.prop }}"
+    value="{{ item.value }}"
+    vtype="string"
+  with_items:
+    - prop: 'application-name'
+      value: 'server-{{ ansible_hostname }}'
+    - prop: 'license-key'
+      value: '{{ newrelic_license_key }}'
+
+- name: Install NewRelic PHP agent
+  apt:
+    name="{{ item }}"
+    state="latest"
+  with_items:
+    - 'newrelic-php5'
+    - 'newrelic-sysmond'
+
+- name: Remove duplicate newrelic.ini
+  file:
+    path="/etc/php/{{ php_version }}/{{ item }}/conf.d/newrelic.ini"
+    state="absent"
+  with_items:
+    - 'cli'
+    - 'fpm'
+
+- name: Set NR-Sysmon license key
+  lineinfile:
+    dest="/etc/newrelic/nrsysmond.cfg"
+    regexp="^license_key=REPLACE_WITH_REAL_KEY"
+    line="license_key={{newrelic_license_key}}"
+    state="present"
+    backrefs="yes"
+  notify:
+    - Restart NR-Sysmon
+
+
+#
+# - name: Add PHP agent license key
+#   lineinfile:
+#     dest="/etc/php5/mods-available/newrelic.ini"
+#     regexp="^newrelic.license"
+#     line="newrelic.license = \"{{ newrelic_license_key }}\""
+#     state=present
+#     backrefs=yes
+#   notify:
+#     - Restart PHP-FPM
+#     - Restart Nginx
+#
+# - name: Set PHP agent application name
+#   lineinfile:
+#     dest="/etc/php5/mods-available/newrelic.ini"
+#     regexp="^newrelic.appname"
+#     line="newrelic.appname = \"{{ ansible_hostname }}-server\""
+#     state=present
+#     backrefs=yes
+#   notify:
+#     - Restart PHP-FPM
+#     - Restart Nginx
