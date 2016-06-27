@@ -14,16 +14,14 @@ server {
 	index index.html index.htm index.php;
 
 	location / {
-		try_files $uri $uri/{% if not item.unrouted %} /index.php?$query_string {% else %} =404 {% endif %};
+		try_files $uri $uri/{% if item.unrouted is not defined %} /index.php?$query_string {% else %} =404 {% endif %};
 	}
-
-	{% if item.unrouted %}error_page 404 /includes/errors/404.php;{% endif %}
 
 	error_log /var/log/nginx/{{item.url}}-error.log error;
 
 	location ~ \.php$ {
 			try_files $uri =404;
-			fastcgi_pass unix:/var/run/php/php7.1-fpm.sock;
+			fastcgi_pass unix:/var/run/php/php{{ php_version }}-fpm.sock;
 			fastcgi_index index.php;
 			fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 			fastcgi_param PHP_VALUE "newrelic.appname={{ item.url }}";
