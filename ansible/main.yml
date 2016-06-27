@@ -11,7 +11,7 @@
   roles:
     - { role: php,      tags: php       }
     - { role: nginx,    tags: nginx     }
-#   - { role: repos,    tags: repos, become_user: www-data }
+    - { role: repos,    tags: repos, become_user: www-data }
 #   - { role: mysql,    tags: mysql     }
     - { role: redis,    tags: redis     }
 #   - { role: newrelic, tags: newrelic  }

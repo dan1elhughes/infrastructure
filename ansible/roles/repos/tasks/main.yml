@@ -17,7 +17,7 @@
 
 - name: Copy Bitbucket deploy key
   copy:
-    src="deploy.id_rsa"
+    dest="/var/www/.ssh/deploy.id_rsa"
     content="{{ bitbucket_deploy_key }}"
     mode=0600
   become_user: www-data
@@ -31,13 +31,13 @@
     mode=0664
   become_user: www-data
 
-- name: Fetch production git repositories
-  git:
-    repo={{ item.src }}
-    version={{ item.branch }}
-    dest="/var/www/{{ item.url }}"
-    depth=1
-    accept_hostkey=yes
-  become_user: www-data
-  with_items: domains
-  when: item.repo is defined
+# - name: Fetch production git repositories
+#   git:
+#     repo={{ item.src }}
+#     version={{ item.branch }}
+#     dest="/var/www/{{ item.url }}"
+#     depth=1
+#     accept_hostkey=yes
+#   become_user: www-data
+#   with_items: domains
+#   when: item.repo is defined
