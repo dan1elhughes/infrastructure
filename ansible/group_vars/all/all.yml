@@ -1,6 +1,6 @@
 ---
-user: xes
-gpg_keynum: 96915FFD
+user: "xes"
+gpg_keynum: "96915FFD"
 php_version: "7.0"
 crypted_password: "{{ SECRET_plaintext_password | password_hash('sha512') }}"
 ansible_sudo_pass: "{{ SECRET_plaintext_password }}"
