@@ -8,7 +8,7 @@
     rule='allow'
     state='enabled'
   with_items:
-  - 22
+  - 80
   - 443
 
 - name: Install Nginx
