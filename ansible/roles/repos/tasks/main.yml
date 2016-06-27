@@ -1,4 +1,7 @@
 ---
+- name: Load host variables
+  include_vars: "sites/{{ ansible_hostname }}.yml"
+
 - name: Create root web server directory
   file:
     path="/var/www"
@@ -31,13 +34,13 @@
     mode=0664
   become_user: www-data
 
-# - name: Fetch production git repositories
-#   git:
-#     repo={{ item.src }}
-#     version={{ item.branch | default('master') }}
-#     dest="/var/www/{{ item.url }}"
-#     depth=1
-#     accept_hostkey=yes
-#   become_user: www-data
-#   with_items: domains
-#   when: item.repo is defined
+- name: Fetch git repositories
+  git:
+    repo="{{ item.repo }}"
+    version="{{ item.branch | default('master') }}"
+    dest="/var/www/{{ item.url }}"
+    depth=1
+    accept_hostkey=yes
+  become_user: www-data
+  with_items: "{{ sites }}"
+  when: item.repo is defined
