@@ -32,3 +32,10 @@
     backrefs=yes
   notify:
     - Restart PHP-FPM
+
+- name: install composer
+  shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+  become: yes
+  args:
+    warn: no # Disable the warning about using cURL
+    creates: /usr/local/bin/composer
