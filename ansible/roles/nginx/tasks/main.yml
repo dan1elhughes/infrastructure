@@ -1,6 +1,15 @@
 ---
-- name: Open port 80
-  ufw: rule=allow port=80
+- name: Load host variables
+  include_vars: "sites/{{ ansible_hostname }}.yml"
+
+- name: Open ports and enable firewall
+  ufw:
+    port='{{item}}'
+    rule='allow'
+    state='enabled'
+  with_items:
+  - 22
+  - 443
 
 - name: Install Nginx
   apt:
