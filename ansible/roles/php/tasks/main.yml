@@ -7,17 +7,17 @@
     name={{ item }}
     state=latest
   with_items:
-    - php7.1-fpm
-    - php7.1-mysql
-    - php7.1-gd
-    - php7.1-cli
-    - php7.1-curl
+    - php{{ php_version }}-fpm
+    - php{{ php_version }}-mysql
+    - php{{ php_version }}-gd
+    - php{{ php_version }}-cli
+    - php{{ php_version }}-curl
   notify:
     - Restart PHP-FPM
 
 - name: Disable CGI file path fixing
   lineinfile:
-    dest="/etc/php/7.1/fpm/php.ini"
+    dest="/etc/php/{{ php_version }}/fpm/php.ini"
     regexp="^;cgi.fix_pathinfo=1"
     line="cgi.fix_pathinfo=0"
     backrefs=yes
@@ -26,7 +26,7 @@
 
 - name: Disable PHP X-Powered-By header
   lineinfile:
-    dest="/etc/php/7.1/fpm/php.ini"
+    dest="/etc/php/{{ php_version }}/fpm/php.ini"
     regexp="^expose_php = On"
     line="expose_php = Off"
     backrefs=yes
