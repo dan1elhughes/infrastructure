@@ -44,7 +44,7 @@
   template:
     src="domains.conf.j2"
     dest="/etc/nginx/sites-available/{{ item.url }}.conf"
-  with_items: sites
+  with_items: "{{ sites }}"
   notify:
     - Restart Nginx
 
@@ -53,7 +53,7 @@
     src="/etc/nginx/sites-available/{{ item.url }}.conf"
     dest="/etc/nginx/sites-enabled/{{ item.url }}.conf"
     state=link
-  with_items: sites
+  with_items: "{{ sites }}"
   notify:
     - Restart Nginx
 
@@ -62,4 +62,4 @@
     path="/var/www/{{ item.url }}"
     state=directory
     owner="www-data" group="www-data"
-  with_items: sites
+  with_items: "{{ sites }}"
