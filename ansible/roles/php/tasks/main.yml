@@ -33,7 +33,7 @@
   notify:
     - Restart PHP-FPM
 
-- name: install composer
+- name: Install composer
   shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   become: yes
   args:
