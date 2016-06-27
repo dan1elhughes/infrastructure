@@ -34,7 +34,7 @@
 # - name: Fetch production git repositories
 #   git:
 #     repo={{ item.src }}
-#     version={{ item.branch }}
+#     version={{ item.branch | default('master') }}
 #     dest="/var/www/{{ item.url }}"
 #     depth=1
 #     accept_hostkey=yes
