@@ -53,27 +53,3 @@
     backrefs="yes"
   notify:
     - Restart NR-Sysmon
-
-
-#
-# - name: Add PHP agent license key
-#   lineinfile:
-#     dest="/etc/php5/mods-available/newrelic.ini"
-#     regexp="^newrelic.license"
-#     line="newrelic.license = \"{{ newrelic_license_key }}\""
-#     state=present
-#     backrefs=yes
-#   notify:
-#     - Restart PHP-FPM
-#     - Restart Nginx
-#
-# - name: Set PHP agent application name
-#   lineinfile:
-#     dest="/etc/php5/mods-available/newrelic.ini"
-#     regexp="^newrelic.appname"
-#     line="newrelic.appname = \"{{ ansible_hostname }}-server\""
-#     state=present
-#     backrefs=yes
-#   notify:
-#     - Restart PHP-FPM
-#     - Restart Nginx
