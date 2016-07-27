@@ -9,6 +9,7 @@
 - hosts: nodes
   become: yes
   roles:
+    - { role: ci,       tags: ci        }
     - { role: php,      tags: php       }
     - { role: nginx,    tags: nginx     }
 #   - { role: mysql,    tags: mysql     }

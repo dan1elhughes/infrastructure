@@ -1,0 +1,40 @@
+---
+- name: Load host variables
+  include_vars: "sites/{{ ansible_hostname }}.yml"
+
+- name: Create CI user
+  user:
+    name='ci'
+    home='/src'
+    password='{{ ci_crypted_password }}'
+    shell='/bin/bash'
+    state='present'
+    update_password='on_create'
+
+- name: Create directory for deploy keys
+  file:
+    path="/src/.ssh"
+    state=directory
+    owner="ci"
+    group="ci"
+    mode=0700
+
+- name: Copy continuous integration public key
+  copy:
+    dest="/src/.ssh/authorized_keys"
+    content="{{ ci_deploy_pub }}"
+    owner="ci"
+    group="ci"
+    mode=0600
+
+- name: Copy deploy script
+  copy:
+    src="deploy.sh"
+    dest="/src/deploy.sh"
+    owner="ci"
+    group="ci"
+    mode=0755
+
+#- name: Create deployment directories
+#TODO: Create /var/www/{site}-{branch}/releases
+#TODO: Create /var/www/{site}-{branch}/current -> releases
