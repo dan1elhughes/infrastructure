@@ -1,5 +1,10 @@
 ---
 sites:
   - url: "jlwbenchmark.co.uk"
-    repo: "git@bitbucket.org:dan1elhughes/benchmark.git"
-    root: "/htdocs"
+    branch: "develop"
+
+  - url: "xes.io"
+    branch: "master"
+
+  - url: "xes.io"
+    branch: "develop"

@@ -19,6 +19,15 @@
     group="ci"
     mode=0700
 
+- name: Create releases directories
+  file:
+    path="/var/www/{{ item.url }}/releases"
+    state="directory"
+    owner="www-data"
+    group="www-data"
+    mode=0755
+  with_items: "{{ sites }}"
+
 - name: Copy continuous integration public key
   copy:
     dest="/src/.ssh/authorized_keys"
@@ -35,6 +44,17 @@
     group="ci"
     mode=0755
 
-#- name: Create deployment directories
-#TODO: Create /var/www/{site}-{branch}/releases
-#TODO: Create /var/www/{site}-{branch}/current -> releases
+- name: Copy domain calculation script
+  template:
+    src="domains.sh"
+    dest="/src/domains.sh"
+    owner="ci"
+    group="ci"
+    mode=0755
+
+- name: Allow execution of deploy script as www-data
+  lineinfile:
+    dest: "/etc/sudoers"
+    state: present
+    line: "ci ALL =(www-data) NOPASSWD: /src/extract.sh"
+    validate: 'visudo -cf %s'

@@ -38,28 +38,63 @@
     dest="/usr/share/nginx/html/index.html"
 
 - name: Create root web server directory
-  file: path="/var/www" state=directory owner="www-data" group="www-data" mode=0755
+  file:
+    path="/var/www"
+    state=directory
+    owner="www-data"
+    group="www-data"
+    mode=0755
 
-- name: Generate server-specific domain config files
+- name: Generate production domain configs
   template:
     src="domains.conf.j2"
     dest="/etc/nginx/sites-available/{{ item.url }}.conf"
   with_items: "{{ sites }}"
+  when: "item.branch == 'master'"
   notify:
     - Restart Nginx
 
-- name: Enable domain configs
+- name: Generate preview domain configs
+  template:
+    src="domains.conf.j2"
+    dest="/etc/nginx/sites-available/{{ item.url ~ '.' ~ item.branch ~ '.xes.io' }}.conf"
+  with_items: "{{ sites }}"
+  when: "item.branch != 'master'"
+  notify:
+    - Restart Nginx
+
+- name: Enable production configs
   file:
     src="/etc/nginx/sites-available/{{ item.url }}.conf"
     dest="/etc/nginx/sites-enabled/{{ item.url }}.conf"
     state=link
   with_items: "{{ sites }}"
+  when: "item.branch == 'master'"
   notify:
     - Restart Nginx
 
-- name: Create domain folders
+- name: Enable preview configs
+  file:
+    src="/etc/nginx/sites-available/{{ item.url ~ '.' ~ item.branch ~ '.xes.io' }}.conf"
+    dest="/etc/nginx/sites-enabled/{{ item.url ~ '.' ~ item.branch ~ '.xes.io' }}.conf"
+    state=link
+  with_items: "{{ sites }}"
+  when: "item.branch != 'master'"
+  notify:
+    - Restart Nginx
+
+- name: Create production www folders
   file:
     path="/var/www/{{ item.url }}"
     state=directory
     owner="www-data" group="www-data"
   with_items: "{{ sites }}"
+  when: "item.branch == 'master'"
+
+- name: Create preview www folders
+  file:
+    path="/var/www/{{ item.url ~ '.' ~ item.branch ~ '.xes.io' }}"
+    state=directory
+    owner="www-data" group="www-data"
+  with_items: "{{ sites }}"
+  when: "item.branch != 'master'"

@@ -10,19 +10,25 @@ branch=$2
 num=$3
 
 artifact="/src/${site}_${num}.tgz"
-release="/src/var/www/$site-$branch/releases/$num"
-current="/src/var/www/$site-$branch/current"
-# shared="/var/www/$site-$branch/shared"
 
-echo "Extracting $artifact to $release..."
-mkdir -p "$release"
-untarlog="$(tar -xzvf $artifact -C $release --strip-components 1 --exclude='.git*')"
-filecount=$(echo "$untarlog" | wc -l)
-echo "Extracted $filecount files"
+domain=$(/src/domains.sh "$site" "$branch")
 
-echo "Updating link..."
-[ -L "$current" ] && rm "$current"
-ln -sf "$release" "$current"
-echo "$current => $release"
+if [ "$domain" != "none" ]; then
 
-#rm "$artifact"
+	release="/var/www/$domain/releases/$num"
+	current="/var/www/$domain/current"
+
+	echo "Extracting $artifact to $release..."
+	mkdir -p "$release"
+	untarlog=$(sudo -u www-data /src/extract.sh "$artifact" "$release")
+	filecount=$(echo "$untarlog" | wc -l)
+	echo "Extracted $filecount files"
+
+	echo "Updating link..."
+	[ -L "$current" ] && rm "$current"
+	ln -sf "$release" "$current"
+	echo "$current => $release"
+
+fi
+
+rm "$artifact"

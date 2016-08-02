@@ -1,39 +1,45 @@
+{% if item.branch == 'master' %}
+{% set url = item.url %}
+{% else %}
+{% set url = item.url ~ '.' ~ item.branch ~ '.xes.io' %}
+{% endif %}
+
 server {
 	listen 80;
 	listen [::]:80;
-	server_name www.{{ item.url }};
-	return 301 $scheme://{{ item.url }}$request_uri;
+	server_name www.{{ url }};
+	return 301 $scheme://{{ url }}$request_uri;
 }
 
 server {
 	listen 80;
 	listen [::]:80;
-	server_name {{ item.url }};
+	server_name {{ url }};
 
-	root /var/www/{{ item.url }}/current{{ item.root }};
+	root /var/www/{{ url }}/current{{ item.root | default('/htdocs') }};
 	index index.html index.htm index.php;
 
 	location / {
 		try_files $uri $uri/{% if item.unrouted is not defined %} /index.php?$query_string {% else %} =404 {% endif %};
 	}
 
-	error_log /var/log/nginx/{{item.url}}-error.log error;
+	error_log /var/log/nginx/{{ url }}-error.log error;
 
 	location ~ \.php$ {
-			try_files $uri =404;
-			fastcgi_pass unix:/var/run/php/php{{ php_version }}-fpm.sock;
-			fastcgi_index index.php;
-			fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-			fastcgi_param PHP_VALUE "newrelic.appname={{ item.url }}";
-			fastcgi_param APP_ENV production;
-			include fastcgi_params;
+		try_files $uri =404;
+		fastcgi_pass unix:/var/run/php/php{{ php_version }}-fpm.sock;
+		fastcgi_index index.php;
+		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+		fastcgi_param PHP_VALUE "newrelic.appname={{ url }}";
+		fastcgi_param APP_ENV {{ item.environment | default('production') }};
+		include fastcgi_params;
 	}
 }
 
 server {
 	listen 80;
 	listen [::]:80;
-	server_name upcheck.{{ item.url }};
+	server_name up.{{ url }};
 	location / {
 		return 200 'up';
 		add_header Content-Type text/plain;

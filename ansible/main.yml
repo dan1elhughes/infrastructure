@@ -9,9 +9,9 @@
 - hosts: nodes
   become: yes
   roles:
-    - { role: ci,       tags: ci        }
     - { role: php,      tags: php       }
     - { role: nginx,    tags: nginx     }
+    - { role: ci,       tags: ci        }
 #   - { role: mysql,    tags: mysql     }
     - { role: redis,    tags: redis     }
     - { role: newrelic, tags: newrelic  }
