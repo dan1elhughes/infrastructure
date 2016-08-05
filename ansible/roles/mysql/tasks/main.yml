@@ -1,0 +1,108 @@
+---
+- name: Check if MySQL already installed
+  command: 'dpkg -s mysql-server'
+  register: installed
+  changed_when: false
+  failed_when: false
+
+- name: Set MySQL root password before installing
+  debconf:
+    name='mysql-server'
+    question='{{ item }}'
+    value='{{ mysql_root_password }}'
+    vtype='password'
+  with_items:
+    - 'mysql-server-5.5/root_password'
+    - 'mysql-server-5.5/root_password_again'
+  when: installed.rc != 0
+
+- name: Install MySQL
+  apt:
+    name="{{ item }}"
+    state="latest"
+  with_items:
+    - python-mysqldb
+    - mysql-server
+
+- name: Start MySQL
+  service:
+    name="mysql"
+    state="started"
+
+- name: Update MySQL root password
+  mysql_user:
+    login_user="root"
+    login_password="{{ mysql_root_password }}"
+    name="root"
+    host="{{ item }}"
+    password="{{ mysql_root_password }}"
+    check_implicit_admin="yes"
+    priv=*.*:ALL,GRANT
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: Delete anonymous user for localhost
+  mysql_user:
+    user=""
+    state="absent"
+    login_password="{{ mysql_root_password }}"
+    login_user=root
+
+- name: Remove test database
+  mysql_db:
+    db="test"
+    state="absent"
+    login_password="{{ mysql_root_password }}"
+    login_user=root
+
+- name: Create GPG keyring
+  command: "gpg --list-keys"
+  become_user: "{{ user }}"
+  register: "gpg_listkeys"
+  changed_when: "gpg_listkeys.stdout.find('trustdb created') != -1"
+
+- name: Import GPG public key
+  shell: "gpg --keyserver pgp.mit.edu --recv-keys {{ gpg_keynum }}"
+  become_user: "{{ user }}"
+  when: gpg_listkeys.stdout.find(gpg_keynum) == -1
+
+- name: Create backup user
+  mysql_user:
+    login_user="root"
+    login_password="{{ mysql_root_password }}"
+    name="{{ item.name }}"
+    password="{{ item.password }}"
+    priv="*.*:SHOW DATABASES,SELECT,LOCK TABLES,RELOAD"
+    state="present"
+  with_items:
+    - "{{ mysql_backup_user }}"
+
+# - name: Copy backup script
+#   template:
+#     src="backup.sh"
+#     dest="/home/{{ user }}/backup.sh"
+#     owner="{{ user }}"
+#     group="{{ user }}"
+#     mode="0700"
+#   with_items: db_backup_user
+#   when: db_backup_user is defined
+#
+# - name: Set up automated daily backup
+#   cron:
+#     name="Database backup"
+#     user="{{ user }}"
+#     minute="0"
+#     hour="4"
+#     job="/bin/bash /home/{{ user }}/backup.sh > /dev/null"
+#
+# - name: Create databases
+#   mysql_db:
+#     login_user="root"
+#     login_password="{{ mysql_root_password }}"
+#     name="{{ item }}"
+#     state="present"
+#   with_items: databases
+#   when: databases is defined

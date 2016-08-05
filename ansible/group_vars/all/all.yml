@@ -9,3 +9,9 @@ pushbullet_api_key: "{{ SECRET_pushbullet_api_key }}"
 bitbucket_deploy_key: "{{ SECRET_bitbucket_deploy_key }}"
 ci_deploy_pub: "{{ SECRET_ci_deploy_pub }}"
 newrelic_license_key: "{{ SECRET_newrelic_license_key }}"
+mysql_root_password: "{{ SECRET_mysql_root_password }}"
+mysql_backup_user:
+  - {
+      name: "backup",
+      password: "{{ SECRET_mysql_backup_password }}"
+    }
