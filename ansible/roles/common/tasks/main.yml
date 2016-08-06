@@ -54,3 +54,13 @@
   with_items:
     - git
     - language-pack-en
+
+- name: Install unattended upgrades
+  apt:
+    name='unattended-upgrades'
+    state='present'
+
+- name: Configure unattended-upgrades
+  copy:
+    dest='/etc/apt/apt.conf.d/20auto-upgrades'
+    src='unattended-upgrades.conf'
