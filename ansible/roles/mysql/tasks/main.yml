@@ -69,17 +69,6 @@
   become_user: "{{ user }}"
   when: gpg_listkeys.stdout.find(gpg_keynum) == -1
 
-- name: Create backup user
-  mysql_user:
-    login_user="root"
-    login_password="{{ mysql_root_password }}"
-    name="{{ item.name }}"
-    password="{{ item.password }}"
-    priv="*.*:SHOW DATABASES,SELECT,LOCK TABLES,RELOAD"
-    state="present"
-  with_items:
-    - "{{ mysql_backup_user }}"
-
 # - name: Copy backup script
 #   template:
 #     src="backup.sh"
@@ -106,3 +95,14 @@
 #     state="present"
 #   with_items: databases
 #   when: databases is defined
+
+- name: Create backup user
+  mysql_user:
+    login_user="root"
+    login_password="{{ mysql_root_password }}"
+    name="{{ item.name }}"
+    password="{{ item.password }}"
+    priv="*.*:SHOW DATABASES,SELECT,LOCK TABLES,RELOAD"
+    state="present"
+  with_items:
+    - "{{ mysql_backup_user }}"
