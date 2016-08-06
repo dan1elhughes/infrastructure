@@ -8,4 +8,6 @@ fi
 artifact=$1
 directory=$2
 
+mkdir -p "$directory"
+
 tar -xzvf $artifact -C $directory --strip-components 1 --exclude='.git*'

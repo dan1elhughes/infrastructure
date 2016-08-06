@@ -36,15 +36,22 @@
     group="ci"
     mode=0600
 
-- name: Copy deploy script
+- name: Copy scripts
   copy:
-    src="deploy.sh"
-    dest="/src/deploy.sh"
-    owner="ci"
-    group="ci"
+    src="{{ item.name }}"
+    dest="/src/{{ item.name }}"
+    owner="{{ item.owner }}"
+    group="{{ item.owner }}"
     mode=0755
+  with_items:
+    - name: 'deploy.sh'
+      owner: 'ci'
+    - name: 'extract.sh'
+      owner: 'www-data'
+    - name: 'link.sh'
+      owner: 'www-data'
 
-- name: Copy domain calculation script
+- name: Generate domain calculation script
   template:
     src="domains.sh"
     dest="/src/domains.sh"
@@ -52,9 +59,9 @@
     group="ci"
     mode=0755
 
-- name: Allow execution of deploy script as www-data
+- name: Allow execution of extraction scripts as www-data
   lineinfile:
     dest: "/etc/sudoers"
     state: present
-    line: "ci ALL =(www-data) NOPASSWD: /src/extract.sh"
+    line: "ci ALL =(www-data) NOPASSWD: /src/extract.sh, /src/link.sh"
     validate: 'visudo -cf %s'
