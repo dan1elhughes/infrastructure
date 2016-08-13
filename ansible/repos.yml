@@ -1,6 +1,0 @@
----
-
-- hosts: nodes
-  become: yes
-  roles:
-    - { role: repos,    tags: repos     }
