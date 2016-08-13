@@ -1,4 +1,7 @@
 ---
+- name: Load host variables
+  include_vars: "sites/{{ ansible_hostname }}.yml"
+
 - name: Check if MySQL already installed
   command: 'dpkg -s mysql-server'
   register: installed
