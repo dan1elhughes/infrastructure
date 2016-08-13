@@ -10,8 +10,11 @@ bitbucket_deploy_key: "{{ SECRET_bitbucket_deploy_key }}"
 ci_deploy_pub: "{{ SECRET_ci_deploy_pub }}"
 newrelic_license_key: "{{ SECRET_newrelic_license_key }}"
 mysql_root_password: "{{ SECRET_mysql_root_password }}"
-mysql_backup_user:
+mysql_backup:
   - {
       name: "backup",
-      password: "{{ SECRET_mysql_backup_password }}"
+      password: "{{ SECRET_mysql_backup_password }}",
+      email_src: "{{ SECRET_email_src }}",
+      email_dest: "{{ SECRET_email_dest }}",
+      email_key: "{{ SECRET_email_key }}"
     }

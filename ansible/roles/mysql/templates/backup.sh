@@ -2,10 +2,10 @@
 
 TIMESTAMP=$(date +"%Y%m%d")
 BACKUP_DIR=$(mktemp -d)
-HOST="{{ ansible_hostname }}.{{ type }}"
-MAILGUN_API_KEY="{{ mailgun_api_key }}"
-SRC_EMAIL="{{ backup_src_email }}"
-DEST_EMAIL="{{ backup_dest_email }}"
+HOST="{{ ansible_hostname }}"
+MAILGUN_API_KEY="{{ item.email_key }}"
+SRC_EMAIL="{{ item.email_src }}"
+DEST_EMAIL="{{ item.email_dest }}"
 
 MYSQL_USER="{{ item.name }}"
 MYSQL=/usr/bin/mysql

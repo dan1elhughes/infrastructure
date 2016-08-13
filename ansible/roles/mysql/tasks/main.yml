@@ -72,32 +72,33 @@
   become_user: "{{ user }}"
   when: gpg_listkeys.stdout.find(gpg_keynum) == -1
 
-# - name: Copy backup script
-#   template:
-#     src="backup.sh"
-#     dest="/home/{{ user }}/backup.sh"
-#     owner="{{ user }}"
-#     group="{{ user }}"
-#     mode="0700"
-#   with_items: db_backup_user
-#   when: db_backup_user is defined
-#
-# - name: Set up automated daily backup
-#   cron:
-#     name="Database backup"
-#     user="{{ user }}"
-#     minute="0"
-#     hour="4"
-#     job="/bin/bash /home/{{ user }}/backup.sh > /dev/null"
-#
-# - name: Create databases
-#   mysql_db:
-#     login_user="root"
-#     login_password="{{ mysql_root_password }}"
-#     name="{{ item }}"
-#     state="present"
-#   with_items: databases
-#   when: databases is defined
+- name: Copy backup script
+  template:
+    src="backup.sh"
+    dest="/home/{{ user }}/backup.sh"
+    owner="{{ user }}"
+    group="{{ user }}"
+    mode="0700"
+  with_items:
+    - "{{ mysql_backup }}"
+
+- name: Set up automated daily backup
+  cron:
+    name="Database backup"
+    user="{{ user }}"
+    minute="0"
+    hour="4"
+    job="/bin/bash /home/{{ user }}/backup.sh > /dev/null"
+
+- name: Create databases
+  mysql_db:
+    login_user="root"
+    login_password="{{ mysql_root_password }}"
+    name="{{ item }}"
+    state="present"
+  #https://github.com/ansible/ansible/issues/12344#issuecomment-177181288
+  with_items: " {{databases | default([]) }}"
+  when: databases is defined
 
 - name: Create backup user
   mysql_user:
@@ -108,4 +109,4 @@
     priv="*.*:SHOW DATABASES,SELECT,LOCK TABLES,RELOAD"
     state="present"
   with_items:
-    - "{{ mysql_backup_user }}"
+    - "{{ mysql_backup }}"
