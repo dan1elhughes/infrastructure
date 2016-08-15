@@ -100,6 +100,28 @@
   with_items: " {{databases | default([]) }}"
   when: databases is defined
 
+- name: Create database edit users
+  mysql_user:
+    login_user="root"
+    login_password="{{ mysql_root_password }}"
+    name="{{ item.user }}"
+    password="{{ item.pass }}"
+    priv="{{ item.db }}.*:{{ mysql_edit_perms }}"
+    state="present"
+  with_items: "{{ mysql_users }}"
+  when: item.permission == 'edit'
+
+- name: Create database view users
+  mysql_user:
+    login_user="root"
+    login_password="{{ mysql_root_password }}"
+    name="{{ item.user }}"
+    password="{{ item.pass }}"
+    priv="{{ item.db }}.*:{{ mysql_view_perms }}"
+    state="present"
+  with_items: "{{ mysql_users }}"
+  when: item.permission == 'view'
+
 - name: Create backup user
   mysql_user:
     login_user="root"
@@ -108,5 +130,4 @@
     password="{{ item.password }}"
     priv="*.*:SHOW DATABASES,SELECT,LOCK TABLES,RELOAD"
     state="present"
-  with_items:
-    - "{{ mysql_backup }}"
+  with_items: "{{ mysql_backup }}"

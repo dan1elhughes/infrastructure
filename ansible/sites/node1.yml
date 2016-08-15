@@ -8,3 +8,6 @@ sites:
 
   - url: "xes.io"
     branch: "develop"
+
+databases:
+  - "wsd"
