@@ -98,7 +98,6 @@
     state="present"
   #https://github.com/ansible/ansible/issues/12344#issuecomment-177181288
   with_items: " {{databases | default([]) }}"
-  when: databases is defined
 
 - name: Create database edit users
   mysql_user:
