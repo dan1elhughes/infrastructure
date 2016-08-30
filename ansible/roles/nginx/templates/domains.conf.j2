@@ -34,6 +34,15 @@ server {
 		fastcgi_param APP_ENV {{ item.environment | default('production') }};
 		include fastcgi_params;
 	}
+
+	location ^~ /.well-known/acme-challenge/ {
+		default_type "text/plain";
+		root /var/www/{{ url }};
+	}
+
+	location = /.well-known/acme-challenge/ {
+		return 404;
+	}
 }
 
 server {
