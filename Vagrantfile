@@ -18,6 +18,17 @@ chown root: /root/.ssh/authorized_keys
 chmod 600 /root/.ssh/authorized_keys
 EOF
 
+createShortcuts = <<EOF
+cat > /home/vagrant/.ssh/config << END
+Host node1
+	User xes
+	HostName 192.168.10.10
+Host node2
+	User xes
+	HostName 192.168.10.11
+END
+EOF
+
 Vagrant.configure("2") do |config|
 	config.vm.box = "ubuntu/trusty64"
 
