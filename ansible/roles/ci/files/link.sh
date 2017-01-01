@@ -10,3 +10,4 @@ release=$2
 
 [ -L "$current" ] && rm "$current"
 ln -sf "$release" "$current"
+ln -sf "$(readlink -f $current/../../.env)" "$current/.env"
