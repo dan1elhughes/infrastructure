@@ -33,7 +33,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1="[ \[\e[0;31m\]\h\[\e[00m\] ] \[\e[1;30m\]load: `cat /proc/loadavg | awk '{ print $1; }'`\[\e[00m\] \n\w \$ "
+    PS1="[ \[\e[0;31m\]\h\[\e[00m\] ] \[\e[1;30m\]\u load: `cat /proc/loadavg | awk '{ print $1; }'`\[\e[00m\] \n\w \$ "
 else
     PS1="[ \h ] load: `cat /proc/loadavg | awk '{ print $1; }'` ]\n\w \$ "
 fi
