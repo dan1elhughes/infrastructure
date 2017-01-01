@@ -1,16 +1,16 @@
 #!/bin/bash
 
 TIMESTAMP=$(date +"%Y%m%d")
-BACKUP_DIR=$(mktemp -d)
+BACKUP_DIR="$(mktemp -d)"
 HOST="{{ ansible_hostname }}"
 MAILGUN_API_KEY="{{ item.email_key }}"
 SRC_EMAIL="{{ item.email_src }}"
 DEST_EMAIL="{{ item.email_dest }}"
 
 MYSQL_USER="{{ item.name }}"
-MYSQL=/usr/bin/mysql
+MYSQL="$(which mysql)"
 MYSQL_PASSWORD="{{ item.password }}"
-MYSQLDUMP=/usr/bin/mysqldump
+MYSQLDUMP="$(which mysqldump)"
 
 databases=`$MYSQL --user=$MYSQL_USER -p$MYSQL_PASSWORD -e "SHOW DATABASES;" | grep -Ev "(Database|information_schema|mysql|performance_schema)"`
 
