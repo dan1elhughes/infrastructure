@@ -9,11 +9,11 @@
 - hosts: nodes
   become: yes
   roles:
+    - { role: php,      tags: php       }
     - { role: newrelic, tags: newrelic  }
     - { role: mysql,    tags: mysql     }
     - { role: ci,       tags: ci        }
     - { role: redis,    tags: redis     }
     - { role: nginx,    tags: nginx     }
-    - { role: php,      tags: php       }
 #   - { role: docker,   tags: docker    }
 #   - { role: proxy,    tags: proxy     }
