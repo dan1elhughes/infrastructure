@@ -36,8 +36,7 @@
 - name: Disable all MOTDs
   file:
     path='/etc/update-motd.d/{{item}}'
-    mode='0644'
-    follow='yes'
+    state='absent'
   with_items: '{{contents.stdout_lines}}'
   notify:
     - Rebuild MOTD
