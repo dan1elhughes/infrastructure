@@ -1,6 +1,6 @@
 ---
 sites:
-  - url: "jlwbenchmark.co.uk"
+  - url: "jlwbenchmark.com"
     branch: "develop"
 
   - url: "xes.io"
