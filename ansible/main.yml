@@ -16,4 +16,3 @@
     - { role: redis,    tags: redis     }
     - { role: nginx,    tags: nginx     }
 #   - { role: docker,   tags: docker    }
-#   - { role: proxy,    tags: proxy     }
