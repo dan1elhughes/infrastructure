@@ -29,4 +29,4 @@ if [ "$domain" != "none" ]; then
 
 fi
 
-#rm "$artifact"
+rm "$artifact"
