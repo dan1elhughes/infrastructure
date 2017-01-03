@@ -5,11 +5,11 @@ add-apt-repository -y ppa:ansible/ansible
 apt-get update
 apt-get install -y ansible
 
-ln -sf /vagrant/ansible /home/vagrant
+ln -sf /vagrant/ansible /home/ubuntu
 ln -sf /vagrant/ansible/hosts.ini /etc/ansible/hosts
 ln -sf /vagrant/ansible/ansible.cfg /etc/ansible/ansible.cfg
 
-chmod 600 /home/vagrant/.ssh/id_rsa
+chmod 600 /home/ubuntu/.ssh/id_rsa
 EOF
 
 enableSsh = <<EOF
@@ -19,7 +19,7 @@ chmod 600 /root/.ssh/authorized_keys
 EOF
 
 createShortcuts = <<EOF
-cat > /home/vagrant/.ssh/config << END
+cat > /home/ubuntu/.ssh/config << END
 Host node1
 	User xes
 	HostName 192.168.10.10
@@ -30,7 +30,7 @@ END
 EOF
 
 Vagrant.configure("2") do |config|
-	config.vm.box = "ubuntu/trusty64"
+	config.vm.box = "ubuntu/xenial64"
 
 	config.vm.define "master", primary: true do |master|
 		master.vm.hostname = "master"
