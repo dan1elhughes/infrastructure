@@ -31,6 +31,7 @@ EOF
 
 Vagrant.configure("2") do |config|
 	config.vm.box = "ubuntu/xenial64"
+	config.vm.box_version = "20170113.0.0"
 
 	config.vm.define "master", primary: true do |master|
 		master.vm.hostname = "master"
