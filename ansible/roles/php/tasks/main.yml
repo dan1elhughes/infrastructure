@@ -34,6 +34,13 @@
   notify:
     - Restart PHP-FPM
 
+- name: Name application for NewRelic
+  lineinfile:
+    dest="/etc/php/{{ php_version }}/fpm/php.ini"
+    line="newrelic.appname = {{ ansible_hostname }}"
+  notify:
+    - Restart PHP-FPM
+
 - name: Install composer
   shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   become: yes
