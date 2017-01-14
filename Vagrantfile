@@ -27,9 +27,6 @@ cat > /home/ubuntu/.ssh/config << END
 Host node1
 	User xes
 	HostName 192.168.10.10
-Host node2
-	User xes
-	HostName 192.168.10.11
 END
 EOF
 
@@ -45,6 +42,7 @@ Vagrant.configure("2") do |config|
 		master.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
 		master.vm.provision "shell", inline: ansible
 		master.vm.provision "shell", inline: autoCD
+		master.vm.provision "shell", inline: createShortcuts
 	end
 
 	(1..$nodes).each do |i|
