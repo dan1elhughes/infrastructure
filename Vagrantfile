@@ -12,6 +12,10 @@ ln -sf /vagrant/ansible/ansible.cfg /etc/ansible/ansible.cfg
 chmod 600 /home/ubuntu/.ssh/id_rsa
 EOF
 
+autoCD = <<EOF
+echo cd ansible > /home/ubuntu/.bash_aliases
+EOF
+
 enableSsh = <<EOF
 mv /tmp/authorized_keys /root/.ssh/authorized_keys
 chown root: /root/.ssh/authorized_keys
@@ -40,6 +44,7 @@ Vagrant.configure("2") do |config|
 		master.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
 		master.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "~/.ssh/id_rsa.pub"
 		master.vm.provision "shell", inline: ansible
+		master.vm.provision "shell", inline: autoCD
 	end
 
 	(1..$nodes).each do |i|
