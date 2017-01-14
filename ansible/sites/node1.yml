@@ -1,13 +1,8 @@
 ---
 sites:
-  - url: "jlwbenchmark.com"
-    branch: "develop"
-
-  - url: "xes.io"
-    branch: "master"
-
-  - url: "xes.io"
-    branch: "develop"
+  - { url: "jlwbenchmark.com", branch: "develop" }
+  - { url: "xes.io", branch: "develop" }
+  - { url: "xes.io", branch: "master" }
 
 databases:
   - "wsd"
