@@ -1,6 +1,7 @@
 ---
 - name: Set up user account and secure SSH
   become: yes
+  any_errors_fatal: yes
   hosts: all
   gather_facts: no
   pre_tasks:
