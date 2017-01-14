@@ -1,36 +1,27 @@
 #!/bin/bash
 # {{ ansible_managed }}
 
-TIMESTAMP=$(date +"%Y%m%d")
-BACKUP_DIR="$(mktemp -d)"
 HOST="{{ ansible_hostname }}"
-MAILGUN_API_KEY="{{ item.email_key }}"
-SRC_EMAIL="{{ item.email_src }}"
-DEST_EMAIL="{{ item.email_dest }}"
-
 MYSQL_USER="{{ item.name }}"
-MYSQL="$(which mysql)"
 MYSQL_PASSWORD="{{ item.password }}"
+IS_VM="{{ is_vm }}"
+
+DATE=$(date +"%Y%m%d")
+TIME=$(date +"%H%M")
+BACKUP_DIR="/home/xes/backups"
+MYSQL="$(which mysql)"
 MYSQLDUMP="$(which mysqldump)"
+EXCLUDED_DATABASES="information_schema|performance_schema|sys"
 
-databases=`$MYSQL --user=$MYSQL_USER -p$MYSQL_PASSWORD -e "SHOW DATABASES;" | grep -Ev "(Database|information_schema|mysql|performance_schema)"`
+[ "$IS_VM" == "true" ] && HOST="v$HOST"
 
+mkdir -p "$BACKUP_DIR"
+
+databases=`$MYSQL --user=$MYSQL_USER -p$MYSQL_PASSWORD -e "SHOW DATABASES;" | grep -Ev "(Database|$EXCLUDED_DATABASES)"`
 for db in $databases; do
 
-    $MYSQLDUMP --user=$MYSQL_USER -p$MYSQL_PASSWORD $db > "$BACKUP_DIR/${TIMESTAMP}_$db.$HOST.sql"
-    gpg --encrypt --recipient {{ gpg_keynum }} --trust-model always --armor "$BACKUP_DIR/${TIMESTAMP}_$db.$HOST.sql"
+	ascfile="$BACKUP_DIR/$db.${HOST}.${DATE}.${TIME}.sql.asc"
 
-    curl -s --user "api:${MAILGUN_API_KEY}" \
-        https://api.mailgun.net/v3/xes.io/messages \
-        -F from="Database backups <${SRC_EMAIL}>" \
-        -F to="${DEST_EMAIL}" \
-        -F subject="${db} backup for ${TIMESTAMP}" \
-        -F text='[Auto] Backups attached.' \
-        -F attachment=@$BACKUP_DIR/${TIMESTAMP}_$db.${HOST}.sql.asc > /dev/null
-
-    if [[ $? -eq 0 ]]; then
-        rm $BACKUP_DIR/${TIMESTAMP}_$db.${HOST}.sql
-        rm $BACKUP_DIR/${TIMESTAMP}_$db.${HOST}.sql.asc
-    fi
+	$MYSQLDUMP --user=$MYSQL_USER -p$MYSQL_PASSWORD $db | gpg --encrypt --recipient {{ gpg_keynum }} --trust-model always --armor > "$ascfile"
 
 done

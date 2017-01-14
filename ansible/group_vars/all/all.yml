@@ -13,9 +13,6 @@ mysql_backup:
   - {
       name: "backup",
       password: "{{ SECRET_mysql_backup_password }}",
-      email_src: "{{ SECRET_email_src }}",
-      email_dest: "{{ SECRET_email_dest }}",
-      email_key: "{{ SECRET_email_key }}"
     }
 mysql_users: "{{ SECRET_mysql_users }}"
 mysql_edit_perms: "{{ SECRET_mysql_edit_perms }}"

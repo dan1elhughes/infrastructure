@@ -127,6 +127,6 @@
     login_password="{{ mysql_root_password }}"
     name="{{ item.name }}"
     password="{{ item.password }}"
-    priv="*.*:SHOW DATABASES,SELECT,LOCK TABLES,RELOAD"
+    priv="*.*:SHOW DATABASES,SHOW VIEW,SELECT,LOCK TABLES,RELOAD"
     state="present"
   with_items: "{{ mysql_backup }}"
