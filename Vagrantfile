@@ -1,4 +1,4 @@
-$nodes = 2
+$nodes = 1
 
 ansible = <<EOF
 add-apt-repository -y ppa:ansible/ansible
