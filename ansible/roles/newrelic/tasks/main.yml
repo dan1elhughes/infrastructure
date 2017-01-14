@@ -2,12 +2,12 @@
 - name: Set fake license key
   set_fact:
     newrelic_license_key: "{{ newrelic_fake_license_key }}"
-  when: is_vm == 'true'
+  when: is_vm is defined
 
 - name: Set real license key
   set_fact:
     newrelic_license_key: "{{ newrelic_real_license_key }}"
-  when: not is_vm == 'true'
+  when: is_vm is not defined
 
 - name: Add NewRelic apt key
   apt_key:

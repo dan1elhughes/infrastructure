@@ -4,7 +4,7 @@
 HOST="{{ ansible_hostname }}"
 MYSQL_USER="{{ item.name }}"
 MYSQL_PASSWORD="{{ item.password }}"
-IS_VM="{{ is_vm }}"
+IS_VM="{{ is_vm | default('false') }}"
 
 DATE=$(date +"%Y%m%d")
 TIME=$(date +"%H%M")

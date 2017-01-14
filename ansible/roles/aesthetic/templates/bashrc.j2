@@ -34,7 +34,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 # if {is_vm} == true
-if [ "{{ is_vm }}" == "true" ]; then
+if [ "{{ is_vm | default('false') }}" == "true" ]; then
 	VM_FLAG="\[\e[0;96m\]vm\[\e[00m\] "
 else
 	VM_FLAG=""
