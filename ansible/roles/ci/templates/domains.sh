@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# {{ ansible_managed }}
 
 if [ "$#" -lt 2 ]; then
 	echo "Usage: $0 <site> <branch>"

@@ -7,7 +7,7 @@
     group='{{user}}'
 
 - name: Enable bash aliases
-  copy:
+  template:
     src='bash_aliases'
     dest='/home/{{user}}/.bash_aliases'
     owner='{{user}}'

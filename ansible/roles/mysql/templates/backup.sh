@@ -1,4 +1,5 @@
 #!/bin/bash
+# {{ ansible_managed }}
 
 TIMESTAMP=$(date +"%Y%m%d")
 BACKUP_DIR="$(mktemp -d)"
