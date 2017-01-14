@@ -33,8 +33,15 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+# if {is_vm} == true
+if [ "{{ is_vm }}" == "true" ]; then
+	VM_FLAG="\[\e[0;96m\]vm\[\e[00m\] "
+else
+	VM_FLAG=""
+fi
+
 if [ "$color_prompt" = yes ]; then
-    PS1="[ \[\e[0;31m\]\h\[\e[00m\] ] \[\e[1;30m\]\u load: `cat /proc/loadavg | awk '{ print $1; }'`\[\e[00m\] \n\w \$ "
+    PS1="[ $VM_FLAG\[\e[0;31m\]\h\[\e[00m\] ] \[\e[1;30m\]\u load: `cat /proc/loadavg | awk '{ print $1; }'`\[\e[00m\] \n\w \$ "
 else
     PS1="[ \h ] load: `cat /proc/loadavg | awk '{ print $1; }'` ]\n\w \$ "
 fi
