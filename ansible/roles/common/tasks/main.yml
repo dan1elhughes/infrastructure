@@ -64,3 +64,11 @@
   copy:
     dest='/etc/apt/apt.conf.d/20auto-upgrades'
     src='unattended-upgrades.conf'
+
+- name: Create sudo success file
+  copy:
+    content=""
+    dest='/home/{{user}}/.sudo_as_admin_successful'
+    owner='{{user}}'
+    group='{{user}}'
+    mode='0644'
