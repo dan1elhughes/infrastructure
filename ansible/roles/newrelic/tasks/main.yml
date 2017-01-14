@@ -1,4 +1,14 @@
 ---
+- name: Set fake license key
+  set_fact:
+    newrelic_license_key: "{{ newrelic_fake_license_key }}"
+  when: is_vm == 'true'
+
+- name: Set real license key
+  set_fact:
+    newrelic_license_key: "{{ newrelic_real_license_key }}"
+  when: not is_vm == 'true'
+
 - name: Add NewRelic apt key
   apt_key:
     url: "https://download.newrelic.com/548C16BF.gpg"

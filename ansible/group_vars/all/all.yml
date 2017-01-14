@@ -7,7 +7,8 @@ ci_crypted_password: "{{ SECRET_ci_plaintext_password | password_hash('sha512') 
 ansible_sudo_pass: "{{ SECRET_plaintext_password }}"
 pushbullet_api_key: "{{ SECRET_pushbullet_api_key }}"
 ci_deploy_pub: "{{ SECRET_ci_deploy_pub }}"
-newrelic_license_key: "{{ SECRET_newrelic_license_key }}"
+newrelic_real_license_key: "{{ SECRET_newrelic_real_license_key }}"
+newrelic_fake_license_key: "{{ SECRET_newrelic_fake_license_key }}"
 mysql_root_password: "{{ SECRET_mysql_root_password }}"
 mysql_backup:
   - {
