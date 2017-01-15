@@ -6,11 +6,6 @@
   roles:
     - { role: common, tags: common }
     - { role: aesthetic, tags: aesthetic }
-
-- hosts: nodes
-  become: yes
-  any_errors_fatal: yes
-  roles:
     - { role: php,      tags: php       }
     - { role: newrelic, tags: newrelic  }
     - { role: mysql,    tags: mysql     }
