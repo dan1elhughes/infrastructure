@@ -15,11 +15,17 @@
 PUBLICIP=$(curl -sSL https://icanhazip.com)
 LOCALIP=$(hostname -I)
 
+# if {is_vm} == true
+if [ "{{ is_vm | default('false') }}" == "true" ]; then
+	FLAG="-vm"
+fi
+
+
 # Send boot notification
 curl \
 	-u {{ pushbullet_api_key }}: https://api.pushbullet.com/v2/pushes \
 	-d type=note \
-	-d title="{{ ansible_hostname }}" \
+	-d title="{{ ansible_hostname }}$FLAG" \
 	-d body="$LOCALIP : $PUBLICIP" \
 	> /dev/null
 
