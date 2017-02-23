@@ -5,6 +5,8 @@ sites:
   - { url: "wrightschoolofdance.com", branch: "develop" }
   - { url: "xes.io", branch: "develop" }
   - { url: "xes.io", branch: "master" }
+  - { url: "d.anhugh.es", branch: "develop", root: "/_site", unrouted: yes }
+  - { url: "d.anhugh.es", branch: "master", root: "/_site", unrouted: yes }
 
 databases:
   - "wsd"
