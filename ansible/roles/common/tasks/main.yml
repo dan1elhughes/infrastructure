@@ -34,7 +34,7 @@
     dest='/etc/rc.local'
 
 - name: Install update script
-  copy:
+  template:
     src='update.sh'
     dest='/home/{{user}}/update.sh'
     owner='{{user}}'
