@@ -1,13 +1,7 @@
 ---
 - name: Set timezone
-  copy:
-    content='Europe/London{{'\n'}}'
-    dest='/etc/timezone'
-    owner='root'
-    group='root'
-    mode='0644'
-  notify:
-    - Update timezone
+  timezone:
+    name: Europe/London
 
 - name: Update apt cache
   apt:
