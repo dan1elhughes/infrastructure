@@ -28,7 +28,7 @@
     name='fail2ban'
     state='started'
 
-- name: Install Pushbullet script
+- name: Install boot notification script
   template:
     src='rc.local.j2'
     dest='/etc/rc.local'

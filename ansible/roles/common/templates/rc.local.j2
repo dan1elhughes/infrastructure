@@ -12,21 +12,21 @@
 #
 # By default this script does nothing.
 
-PUBLICIP=$(curl -sSL https://icanhazip.com)
+PUBLICIP=$(curl -sSL canihazip.com/s)
 LOCALIP=$(hostname -I)
+MACHINE="{{ ansible_hostname }}"
+
+API_KEY="{{ telegram_api_key }}"
+CHANNEL="{{ telegram_channel_id }}"
 
 # if {is_vm} == true
-if [ "{{ is_vm | default('false') }}" == "true" ]; then
+if [ "{{ is_vm | default('false') }}" = "true" ]; then
 	FLAG="-vm"
 fi
 
+text="$MACHINE$FLAG%0A$LOCALIP%20:%20$PUBLICIP"
 
 # Send boot notification
-curl \
-	-u {{ pushbullet_api_key }}: https://api.pushbullet.com/v2/pushes \
-	-d type=note \
-	-d title="{{ ansible_hostname }}$FLAG" \
-	-d body="$LOCALIP : $PUBLICIP" \
-	> /dev/null
+curl -sS "https://api.telegram.org/bot$API_KEY/sendMessage?chat_id=$CHANNEL&text=$text" > /dev/null
 
 exit 0
