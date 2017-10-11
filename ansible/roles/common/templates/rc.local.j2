@@ -12,7 +12,7 @@
 #
 # By default this script does nothing.
 
-PUBLICIP=$(curl -sSL canihazip.com/s)
+PUBLICIP=$(curl -sSL "https://api.ipify.org")
 LOCALIP=$(hostname -I)
 MACHINE="{{ ansible_hostname }}"
 
