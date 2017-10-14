@@ -12,9 +12,9 @@
 #
 # By default this script does nothing.
 
-PUBLICIP=$(curl -sSL "https://api.ipify.org")
-LOCALIP=$(hostname -I)
-MACHINE=$(hostname)
+PUBLICIP="$(curl -sSL 'https://api.ipify.org')"
+LOCALIP="$(hostname -I)"
+MACHINE="$(hostname)"
 
 API_KEY="{{ telegram_api_key }}"
 CHANNEL="{{ telegram_channel_id }}"
