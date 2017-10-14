@@ -14,7 +14,7 @@
 
 PUBLICIP=$(curl -sSL "https://api.ipify.org")
 LOCALIP=$(hostname -I)
-MACHINE="{{ ansible_hostname }}"
+MACHINE=$(hostname)
 
 API_KEY="{{ telegram_api_key }}"
 CHANNEL="{{ telegram_channel_id }}"
