@@ -47,7 +47,6 @@ Vagrant.configure("2") do |config|
 	(1..$nodes).each do |i|
 		config.vm.define "node#{i}" do |node|
 			node.vm.hostname = "node#{i}"
-			node.vm.synced_folder '.', '/vagrant', disabled: true
 			node.vm.network :private_network, ip: "192.168.10.#{9 + i}"
 			node.vm.network :forwarded_port, guest: "22", host: "#{2219 + i}", id: "ssh"
 			node.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "/tmp/authorized_keys"
